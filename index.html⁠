@@ -2246,28 +2246,7 @@
                         this.busy = false;
                     }
                 },
-                async validateCode(o) {
-                    if (o.status !== 'Expédiée' || this.busy) return;
-                    const entered = String(this.codeInputs[o.id] || '').trim();
-                    if (!/^\d{4}$/.test(entered)) { this.toast('Le code fait 4 chiffres.', 'error'); return; }
-                    this.busy = true;
-                    try {
-                        const ok = await this.rpc('validate_delivery_code', { p_order: o.id, p_code: entered });
-                        this.codeInputs[o.id] = '';
-                        await this.loadOrders();
-                        this.toast(ok ? 'Livraison validée. Ton paiement est libéré.' : 'Code incorrect.', ok ? 'ok' : 'error');
-                    } catch (e) {
-                        this.toast(this.errMsg(e), 'error');
-                    } finally {
-                        this.busy = false;
-                    }
-                },
-
-                // --- médiation (administrateurs seulement) ---
-                resolveDispute(o, side) {
-                    return this.act(() => this.rpc('resolve_dispute', { p_order: o.id, p_side: side }),
-                        side === 'buyer' ? 'Acheteur remboursé.' : 'Paiement versé au vendeur.');
-                }
+             
             };
         }
     </script>
